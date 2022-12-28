@@ -44,14 +44,14 @@ class MongoBackend {
   }
 
   async getMax() {
-    return this.collection.findOne({}, { sort: { value: -1 } });
+    return this.collection.findOne({}, { sort: { value: 1 } });
   }
 
   async max() {
     console.info("Connection to MongoDB");
     console.time("mongodb-connect");
     const client = await this.connect();
-    if (client.isConnected()) {
+    if (client) {
       console.info("Successfully connected to MongoDB");
     } else {
       throw new Error("Connecting to MongoDB failed");
@@ -63,7 +63,7 @@ class MongoBackend {
     const insertResult = await this.insert();
     console.timeEnd("mongodb-insert");
 
-    console.info(`Inserted ${insertResult.result.n} documents into MongoDB`);
+    console.info(`Inserted ${insertResult.insertedCount} documents into MongoDB`);
 
     console.info("Querying MongoDB");
     console.time("mongodb-find");
