@@ -51,7 +51,7 @@ class MongoBackend {
     console.info("Connection to MongoDB");
     console.time("mongodb-connect");
     const client = await this.connect();
-    if (client.isConnected()) {
+    if (client) {
       console.info("Successfully connected to MongoDB");
     } else {
       throw new Error("Connecting to MongoDB failed");
