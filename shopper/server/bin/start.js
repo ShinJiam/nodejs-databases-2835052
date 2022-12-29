@@ -1,9 +1,17 @@
 #!/usr/bin/env node
 
 const http = require('http');
+const mongoose = require('mongoose');
 
 const config = require('../config');
 const App = require('../app');
+
+async function connectToMongoose() {
+  return mongoose.connect(config.mongodb.url, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
+}
 
 /* Logic to start the application */
 const app = App(config);
@@ -45,4 +53,9 @@ function onListening() {
 server.on('error', onError);
 server.on('listening', onListening);
 
-server.listen(port);
+connectToMongoose().then(() => {
+  console.log("Connected to MongoDB Successfully");
+  server.listen(port);
+}).catch((error) => {
+  console.error(error);
+});
